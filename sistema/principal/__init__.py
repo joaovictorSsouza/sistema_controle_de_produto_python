@@ -1,6 +1,7 @@
 # importar o vendidoss
 from sistema.venda import controle_de_vendas
 from sistema.Cadastro import menu_crud
+from sistema.Excel import *
 from sistema.uteis import *
 from sistema.uteis.titulo import *
 from sistema.Relatorio import menu_relatorio
@@ -20,6 +21,9 @@ def principal(produto, vendidos):
             menu_crud(produto)
         elif opc == 2:
             vendidos.append(controle_de_vendas(produto))
+            salvar_excel(vendidos, "Vendas.xlsx")
+            vendidos.clear()
+            
         elif opc == 3:
             if verificarLista(produto):
                 subtitulo('>>> ESTOQUE <<<')

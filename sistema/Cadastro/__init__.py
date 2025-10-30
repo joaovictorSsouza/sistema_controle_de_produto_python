@@ -2,6 +2,7 @@ from random import randint
 from sistema.uteis.titulo import *
 from sistema.uteis import *
 from sistema.principal import *
+from sistema.Excel import *
 from time import sleep
 
 
@@ -42,8 +43,9 @@ def menu_crud(produto):
             subtitulo('>>> CADASTRO DO PRODUTO <<<')
             produto.append(cadastro_produto())
             print(f'Você salvou {produto[0]["nome_do_produto"].upper()} no programa com SUCESSO!')
-
-
+            salvar_excel(produto, "Produtos.xlsx")
+            produto.clear()
+            
         elif escolha == 'B':
             try:
                 a = produto[0]

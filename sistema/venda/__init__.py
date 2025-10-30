@@ -1,5 +1,4 @@
 from time import sleep
-
 from sistema.uteis import *
 from sistema.uteis.titulo import *
 from time import sleep
