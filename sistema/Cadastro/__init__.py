@@ -28,6 +28,7 @@ def cadastro_produto():
 
 
 def menu_crud(produto):
+    '''Função que guia o menu CRUD dentro do cadastro'''
     while True:
         subtitulo('>>> CADASTRO / EXCLUIR / ALTERAR <<<')
         print('''

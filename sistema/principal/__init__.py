@@ -1,13 +1,17 @@
-# importar o vendidoss
 from sistema.venda import controle_de_vendas
 from sistema.Cadastro import menu_crud
 from sistema.Excel import *
 from sistema.uteis import *
 from sistema.uteis.titulo import *
-from sistema.Relatorio import menu_relatorio
 from time import sleep
 
+
 def principal(produto, vendidos):
+    '''Função para chamar o menu principal do sistema'''
+
+
+    planilha_vendas = "Vendas.xlsx"
+    planilha_produto = "Produtos.xlsx"
 
     while True:
         subtitulo('>>> MENU <<<')
@@ -17,38 +21,55 @@ def principal(produto, vendidos):
               'RELATORIO',
               'PRODUTOS CADASTRADOS',
               'SAIR'])
+        
         if opc == 1:
             menu_crud(produto)
+
         elif opc == 2:
-            vendidos.append(controle_de_vendas(produto))
-            salvar_excel(vendidos, "Vendas.xlsx")
-            vendidos.clear()
             
+            df = pd.read_excel(planilha_produto)
+            if df.empty:
+                print("\033[31mNENHUM PRODUTO CADASTRADO\033[m")
+            else:
+                controle_de_vendas(vendidos)
+                
+                     
         elif opc == 3:
-            if verificarLista(produto):
+
+            df = pd.read_excel(planilha_produto)
+            if df.empty:
+                print("\033[31mNENHUM PRODUTO CADASTRADO\033[m")
+            else:
                 subtitulo('>>> ESTOQUE <<<')
-                print(f'\033[33mPRODUTO\033[m{" ":>28}\033[33mESTOQUE\033[m')
-                for cad in produto:
-                    print(f'{cad["estoque"]:<29}{cad["nome_do_produto"].upper():>13}')
-                    print(linha())
+                estoque()
+                print(linha())
 
         elif opc == 4:
-            if verificarLista(vendidos, ' ERRO! NENHUMA VENDA! '):
-                menu_relatorio(vendidos)
+
+            df = pd.read_excel(planilha_vendas)
+            if df.empty:
+                print("\033[31mNENHUMA VENDA REGISTRADA\033[m")
+            else:    
+                subtitulo('>>> RELATORIO DE VENDAS <<<')
+                relatorio_vendas()
+
         elif opc == 5:
-            if verificarLista(produto):
+
+            df = pd.read_excel(planilha_produto)
+            if df.empty:
+                print("\033[31mNENHUM PRODUTO CADASTRADO\033[m")
+            else:
                 subtitulo('>>> PRODUTOS CADASTRADOS <<<')
-                for p in produto:
-                    for k, v in p.items():
-                        print(f'{k}: {v}')
-                    print('=' * 42)
-            print(linha())
+                cadastrados()
+                print(linha())
+
         elif opc == 6:
             print('Você FECHOU O PROGRAMA... ')
             break
 
 
 def menu(lista):
+    '''Função que cria um menu com opções'''
     cont = 1
     for op in lista:
         print(f'\033[32m{cont})\033[m \033[34m{op}\033[m')

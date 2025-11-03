@@ -1,25 +1,34 @@
 from time import sleep
 from sistema.uteis import *
+from sistema.Excel import * 
 from sistema.uteis.titulo import *
 from time import sleep
 
-def controle_de_vendas(produto):
+def controle_de_vendas(lista):
+    '''Função para controle de vendas com condições para permitir
+    somente se o produto digitado, estiver na planilha de produtos.'''
+
     venda = dict()
-    if verificarLista(produto):
-        venda["produto_vendido"] = input('Nome do Produto vendido: ')
-        sleep(0.5)
-        for cadastrado in produto:
-            if venda["produto_vendido"] == cadastrado["nome_do_produto"]:
-                    venda["quantidade_vendida"] = int(input('Quantidade de produto vendido: '))
-                    #diminuir do estoque a quantidade de vendas.
-                    for p in produto:
-                        if venda["produto_vendido"] == p["nome_do_produto"]:
-                            if p["estoque"] >= venda["quantidade_vendida"]:
-                                p["estoque"] -= venda["quantidade_vendida"]
-                                venda["data_da_venda"] = input('Data da Venda: [dd/mm/aaaa]')
-                            else:
-                                print()
-                                print(f'!!!!! NÃO TEMOS ESTOQUE SUFICIENTE !!!!!')
-            elif not any(venda["produto_vendido"] == cadastrado["nome_do_produto"] for cadastrado in produto):
-                print('\033[31mPRODUTO NÃO CADASTRADO\033[m')
-    return venda
+    planilha_produto = "Produtos.xlsx"
+    df_produtos = pd.read_excel(planilha_produto)
+
+    venda["produto_vendido"] = input('Nome do Produto vendido: ')
+    #.isin() cria uma comparação booleana
+    #.any() verifica se existe algum True.
+    if df_produtos["nome_do_produto"].isin([venda["produto_vendido"]]).any():
+        venda["quantidade_vendida"] = int(input('Quantidade de produto vendido: '))
+        lista.append(venda)
+        salvar_excel(lista, "Vendas.xlsx")
+    else:
+        print("\033[31mProduto não encontrado.\033[m")
+
+        
+
+        
+
+        
+
+        
+    
+    
+
