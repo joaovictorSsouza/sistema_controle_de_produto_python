@@ -28,7 +28,11 @@ def cadastro_produto():
 
 
 def menu_crud(produto):
-    '''Função que guia o menu CRUD dentro do cadastro'''
+    '''Função que guia o menu CRUD dentro do cadastro
+       
+       Args: Recebe uma lista - Produtos'''
+    
+
     while True:
         subtitulo('>>> CADASTRO / EXCLUIR / ALTERAR <<<')
         print('''
@@ -48,22 +52,31 @@ def menu_crud(produto):
             produto.clear()
             
         elif escolha == 'B':
-            try:
-                a = produto[0]
-            except IndexError:
-                print('\033[31mERRO! NÃO A NENHUM PRODUTO CADASTRADO\033[m')
+
+            df = pd.read_excel("Produtos.xlsx")
+
+
+            if df.empty:
+                print("\033[31mNENHUM PRODUTO CADASTRADO\033[m")
             else:
-                subtitulo('>>> EXCLUIR PRODUTO <<<')
-                excluir_produto = input('Produto que gostaria de excluir, digite o nome: ')
-                for p in produto:  # Acesso ao dicionario produtos
-                    if p['nome_do_produto'] == excluir_produto:
-                        produto.remove(p)
-                        break
+                 subtitulo('>>> EXCLUIR PRODUTO <<<')
+                 excluir_produto = input('Produto que gostaria de excluir, digite o nome: ')
+                 if df["nome_do_produto"].isin([excluir_produto]).any():
+                     mascara = df["nome_do_produto"] == excluir_produto
+                     df.drop(df[mascara].index, inplace=True)
+                     df.to_excel("Produtos.xlsx", index=False)
+            break
+
         elif escolha == 'C':
-            if verificarLista(produto):
-                subtitulo('>>> ALTERAÇÃO DE PRODUTO <<<')
-                nome_alteracao = leiaOpc('Deseja alterar qual produto? ', produto)
-                if nome_alteracao:
+            
+            df = pd.read_excel("Produtos.xlsx")
+            if df.empty:
+                print("\033[31mNENHUM PRODUTO CADASTRADO\033")
+                
+            else:
+                subtitulo('>>> ALTERAR PRODUTO <<<')
+                nome_alteracao = input('Produto que gostaria de alterar, digite o nome: ')
+                if df["nome_do_produto"].isin([nome_alteracao]).any():
                     while True:
                         print(f'''
                         ALTERAR >>>
@@ -74,21 +87,27 @@ def menu_crud(produto):
                         ''')
                         alterar = input('Deseja alterar: ').upper()
                         sleep(0.5)
-                        for p in produto:  # Acesso ao dicionario cadastrados
-                            if p["nome_do_produto"] == nome_alteracao:
-                                if alterar == 'A':
-                                    novo_valor = leiaFloat('Novo valor: R$')
-                                    p['preco_produto'] = novo_valor
-                                    print('Novo valor cadastrado!')
-                                elif alterar == 'B':
-                                    novo_valor_compra = leiaFloat('Novo valor: R$')
-                                    p['preco_compra'] = novo_valor_compra
-                                    print('Novo valor de compra cadastrado!')
-                                elif alterar == 'C':
-                                    att_estoque = leiaFloat('Novo valor: R$')
-                                    p['estoque'] = att_estoque
-                                    print('Novo Estoque cadastrado!')
-                                break
+                        if alterar == 'A':
+                            novo_valor = leiaFloat('Novo valor: R$')
+                            df.loc[df["nome_do_produto"] == nome_alteracao, "preco_produto"] = novo_valor
+                            df.to_excel("Produtos.xlsx", index=False)
+                            print('Novo valor cadastrado!')
+                            break
+                        
+                        elif alterar == 'B':
+                            novo_valor_compra = leiaFloat('Novo valor: R$')
+                            df.loc[df["nome_do_produto"] == nome_alteracao, "preco_compra"] = novo_valor_compra
+                            df.to_excel("Produtos.xlsx", index=False)
+                            print('Novo valor de compra cadastrado!')
+                            break
+                        
+                        elif alterar == 'C':
+                            att_estoque = leiaFloat('Novo valor: R$')
+                            df.loc[df["nome_do_produto"] == nome_alteracao, "estoque"] = att_estoque
+                            df.to_excel("Produtos.xlsx", index=False)
+                            print('Novo Estoque cadastrado!')
+                            break
+                        
                         if alterar == 'D':
                             break
         elif escolha == 'D':
