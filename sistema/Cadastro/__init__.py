@@ -62,9 +62,9 @@ def menu_crud(produto):
                  subtitulo('>>> EXCLUIR PRODUTO <<<')
                  excluir_produto = input('Produto que gostaria de excluir, digite o nome: ')
                  if df["nome_do_produto"].isin([excluir_produto]).any():
-                     mascara = df["nome_do_produto"] == excluir_produto
-                     df.drop(df[mascara].index, inplace=True)
-                     df.to_excel("Produtos.xlsx", index=False)
+                     mascara = df["nome_do_produto"] == excluir_produto # Mascara para acessar exatamente a linha da planilha que desejo
+                     df.drop(df[mascara].index, inplace=True) # .drop() seerve para apagar dentro de pandas
+                     df.to_excel("Produtos.xlsx", index=False) #index=false reoorganiza os index da planilha 
             break
 
         elif escolha == 'C':

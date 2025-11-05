@@ -17,10 +17,12 @@ def controle_de_vendas(lista):
     #.any() verifica se existe algum True.
     if df_produtos["nome_do_produto"].isin([venda["produto_vendido"]]).any():
         venda["quantidade_vendida"] = int(input('Quantidade de produto vendido: '))
+        # Atualiza o estoque no DataFrame de produtos e salva no Excel
         df_produtos.loc[df_produtos["nome_do_produto"] == venda["produto_vendido"], "estoque"] -= venda["quantidade_vendida"]
         df_produtos.to_excel("Produtos.xlsx", index=False)
-        df_produtos.loc[df_produtos["nome_do_produto"] == venda["produto_vendido"], "preco_produto"] *= venda["quantidade_vendida"]
-        df_produtos.to_excel("Produtos.xlsx", index=False)
+        # Calcula o preço total da venda e adiciona ao dicionário da venda
+        preco_unitario = df_produtos.loc[df_produtos["nome_do_produto"] == venda["produto_vendido"], "preco_produto"].iloc[0]
+        venda["preco_venda"] = preco_unitario * venda["quantidade_vendida"]
         lista.append(venda)
         salvar_excel(lista, "Vendas.xlsx")
     else:
@@ -36,4 +38,3 @@ def controle_de_vendas(lista):
         
     
     
-
