@@ -6,6 +6,7 @@ from sistema.uteis import *
 from sistema.principal import *
 from sistema.Excel import *
 from time import sleep
+from datetime import datetime
 
 
 
@@ -26,9 +27,16 @@ def cadastro_produto():
     preco_produto = leiaFloat('Valor do Produto (Uni): R$')
     estoque = leiaInt('No Estoque: ')
     preco_compra = leiaFloat('Valor de comprar: R$')
+    while True:
+        data_str = input("Data do cadastro (dd/mm/aaaa): ")
+        try:
+            data = datetime.strptime(data_str, '%d/%m/%Y').date()
+            break
+        except ValueError:
+            print("\033[31mFormato de data inválido! Por favor, use o formato dd/mm/aaaa.\033[m")
 
     #passando como arg os atributos para conta
-    return Produto(nome, codigo, preco_produto, estoque, preco_compra)
+    return Produto(nome, codigo, preco_produto, estoque, preco_compra, data)
 
 
 

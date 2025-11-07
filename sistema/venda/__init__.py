@@ -1,8 +1,7 @@
-from time import sleep
 from sistema.uteis import *
 from sistema.Excel import * 
 from sistema.uteis.titulo import *
-from time import sleep
+from datetime import datetime
 
 def controle_de_vendas(lista):
     '''Função para controle de vendas com condições para permitir
@@ -23,6 +22,14 @@ def controle_de_vendas(lista):
         # Calcula o preço total da venda e adiciona ao dicionário da venda
         preco_unitario = df_produtos.loc[df_produtos["nome_do_produto"] == venda["produto_vendido"], "preco_produto"].iloc[0]
         venda["preco_venda"] = preco_unitario * venda["quantidade_vendida"]
+        while True:
+            data_str = input("Data da venda (dd/mm/aaaa): ")
+            try:
+                data = datetime.strptime(data_str, '%d/%m/%Y').date()
+                venda["Data_venda"] = data.strftime('%d/%m/%Y')
+                break
+            except ValueError:
+                print("\033[31mFormato de data inválido! Por favor, use o formato dd/mm/aaaa.\033[m")
         lista.append(venda)
         salvar_excel(lista, "Vendas.xlsx")
     else:
