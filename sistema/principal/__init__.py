@@ -7,7 +7,8 @@ from time import sleep
 
 
 def principal(produto, vendidos):
-    '''Função para chamar o menu principal do sistema'''
+    '''Função para chamar o menu principal do sistema
+    param: Lista: Produto e vendidos'''
 
 
     planilha_vendas = "Vendas.xlsx"

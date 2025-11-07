@@ -1,4 +1,6 @@
 from random import randint
+from classeProduto import *
+import pandas as pd 
 from sistema.uteis.titulo import *
 from sistema.uteis import *
 from sistema.principal import *
@@ -19,17 +21,20 @@ def cadastro_produto():
     '''
     produto = dict()
 
-    produto['nome_do_produto'] = input('Nome do Produto:')
-    produto['codigo_do_produto'] = randint(1000, 3000)
-    produto['preco_produto'] = leiaFloat('Valor do Produto (Uni): R$')
-    produto['estoque'] = leiaInt('No Estoque: ')
-    produto['preco_compra'] = leiaFloat('Valor de comprar: R$')
-    return produto
+    nome = input('Nome do Produto:')
+    codigo = randint(1000, 3000)
+    preco_produto = leiaFloat('Valor do Produto (Uni): R$')
+    estoque = leiaInt('No Estoque: ')
+    preco_compra = leiaFloat('Valor de comprar: R$')
+
+    #passando como arg os atributos para conta
+    return Produto(nome, codigo, preco_produto, estoque, preco_compra)
+
+
 
 
 def menu_crud(produto):
     '''Função que guia o menu CRUD dentro do cadastro
-       
        Args: Recebe uma lista - Produtos'''
     
 
@@ -46,8 +51,10 @@ def menu_crud(produto):
 
         if escolha == 'A':
             subtitulo('>>> CADASTRO DO PRODUTO <<<')
-            produto.append(cadastro_produto())
-            print(f'Você salvou {produto[0]["nome_do_produto"].upper()} no programa com SUCESSO!')
+            novo_produto = cadastro_produto()
+            dic_produto = novo_produto.to_dict()
+            produto.append(dic_produto)
+            sleep(0.5)
             salvar_excel(produto, "Produtos.xlsx")
             produto.clear()
             

@@ -2,7 +2,6 @@ import pandas as pd
 import os
 
 def salvar_excel(lista_dados, nome_arquivo):
-    
     """ Função para salvar excel""" 
 
     if not lista_dados:
